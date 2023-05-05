@@ -417,7 +417,8 @@ const ProyectosProvider = ({children}) => {
 
     const eliminarTareaProyecto = tarea => {
         const proyectoActualizado = {...proyecto}
-        proyectoActualizado.tareas = proyectoActualizado.tareas.filter(t => t._id !== tarea._id)
+        console.log(proyecto.tareas)
+        proyectoActualizado.tareas = proyecto.tareas.filter(t => t._id !== tarea._id)
         setProyecto(proyectoActualizado)
     }
 

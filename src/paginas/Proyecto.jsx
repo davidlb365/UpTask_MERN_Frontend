@@ -26,17 +26,18 @@ const Proyecto = () => {
         socket.emit('abrir proyecto', params.id)
     }, [])
     useEffect(() => {
+        if(!proyecto.nombre || spinning) return
         socket.on('tarea agregada', tareaNueva => {
-            if(tareaNueva.proyecto === proyecto._id) submitTareasProyecto(tareaNueva)
+            submitTareasProyecto(tareaNueva)
         })
         socket.on('tarea eliminada', tareaEliminada => {
-            if(tareaEliminada.proyecto === proyecto._id) eliminarTareaProyecto(tareaEliminada)
+            eliminarTareaProyecto(tareaEliminada)
         })
         socket.on('tarea actualizada', tareaActualizada => {
-            if(tareaActualizada.proyecto._id === proyecto._id) actualizarTareaProyecto(tareaActualizada)
+            actualizarTareaProyecto(tareaActualizada)
         })
         socket.on('nuevo estado', nuevoEstadoTarea => {
-            if(nuevoEstadoTarea.proyecto._id === proyecto._id) cambiarEstadoTarea(nuevoEstadoTarea)
+            cambiarEstadoTarea(nuevoEstadoTarea)
         })
     })
     const {nombre} = proyecto
