@@ -2,10 +2,13 @@ import { useEffect } from "react"
 import useProyectos from "../hooks/useProyectos"
 import { Link, useParams } from "react-router-dom"
 import FormularioProyecto from "../components/FormularioProyecto"
+import Spinner from "../components/Spinner"
+import useSpin from "../hooks/useSpin"
 
 const EditarProyecto = () => {
     const params = useParams()
     const {obtenerProyecto, proyecto, cargando, eliminarProyecto} = useProyectos()
+    const {spinning} = useSpin()
 
     useEffect(() => {
         obtenerProyecto(params.id)
@@ -18,7 +21,7 @@ const EditarProyecto = () => {
     }
 
     const {nombre, colaboradores} = proyecto
-    if(cargando) return 'Cargando...'
+    if(spinning) return <Spinner />
     return (
         <>
             <div className="flex justify-between">

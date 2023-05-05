@@ -2,10 +2,13 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import Alerta from "../components/Alerta"
 import clienteAxios from "../config/clienteAxios"
+import useSpin from "../hooks/useSpin"
 
 const OlvidePassword = () => {
     const [email, setEmail] = useState('')
     const [alerta, setAlerta] = useState({})
+
+    const {setSpinning} = useSpin()
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -16,6 +19,7 @@ const OlvidePassword = () => {
             })
             return
         }
+        setSpinning(true)
         try {
             const url = `/usuarios/olvide-password`
             const {data} = await clienteAxios.post(url, {email})
@@ -29,6 +33,8 @@ const OlvidePassword = () => {
                 error: true,
                 msg: error.response.data.msg
             })
+        } finally {
+            setSpinning(false)
         }
     }
     const {msg} = alerta

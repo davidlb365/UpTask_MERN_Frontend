@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clienteAxios from "../config/clienteAxios";
+import useSpin from "../hooks/useSpin";
 
 const AuthContext = createContext()
 
@@ -31,9 +32,7 @@ const AuthProvider = ({children}) => {
                 setAuth({})
             } finally {
                 setCargando(false)
-            }
-            
-            
+            } 
         }
         autenticarUsuario()
     }, [])

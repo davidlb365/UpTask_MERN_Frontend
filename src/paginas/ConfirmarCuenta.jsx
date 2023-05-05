@@ -2,13 +2,16 @@ import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import Alerta from "../components/Alerta"
 import clienteAxios from "../config/clienteAxios"
+import useSpin from "../hooks/useSpin"
 
 const ConfirmarCuenta = () => {
     const [alerta, setAlerta] = useState({})
     const [cuentaConfirmada, setCuentaConfirmada] = useState(false)
     const params = useParams()
+    const {setSpinning} = useSpin()
     useEffect(() => {
         const confirmarCuenta = async () => {
+            setSpinning(true)
             try {
                 const url = `/usuarios/confirmar/${params.id}`
                 const {data} = await clienteAxios(url)
@@ -22,6 +25,8 @@ const ConfirmarCuenta = () => {
                     error: true,
                     msg: error.response.data.msg
                 })
+            } finally {
+                setSpinning(false)
             }
         }
         confirmarCuenta()

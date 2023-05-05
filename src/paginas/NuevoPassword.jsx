@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Alerta from '../components/Alerta'
 import clienteAxios from '../config/clienteAxios'
+import useSpin from '../hooks/useSpin'
 
 const NuevoPassword = () => {
     const {token} = useParams()
@@ -9,8 +10,12 @@ const NuevoPassword = () => {
     const [tokenValido, setTokenValido] = useState(false)
     const [password, setPassword] = useState('')
     const [passwordModificado, setPasswordModificado] = useState(false)
+
+    const {setSpinning} = useSpin()
+
     useEffect(() => {
         const comprobarToken = async () => {
+            setSpinning(true)
             try {
                 await clienteAxios(`/usuarios/olvide-password/${token}`)
                 setTokenValido(true)
@@ -19,6 +24,8 @@ const NuevoPassword = () => {
                     error: true,
                     msg: error.response.data.msg
                 })
+            } finally {
+                setSpinning(false)
             }
         }
         comprobarToken()
@@ -40,6 +47,7 @@ const NuevoPassword = () => {
             })
             return
         }
+        setSpinning(true)
         try {
             const {data} = await clienteAxios.post(`/usuarios/olvide-password/${token}`, {password})
             setAlerta({
@@ -52,6 +60,8 @@ const NuevoPassword = () => {
                 error: true,
                 msg: error.response.data.msg
             })
+        } finally {
+            setSpinning(false)
         }
     }
 

@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import Alerta from "../components/Alerta"
 import clienteAxios from "../config/clienteAxios"
+import useSpin from "../hooks/useSpin"
 
 const Registrar = () => {
     const [nombre, setNombre] = useState('')
@@ -9,6 +10,8 @@ const Registrar = () => {
     const [password, setPassword] = useState('')
     const [repetirPassword, setRepetirPassword] = useState('')
     const [alerta, setAlerta] = useState({})
+
+    const {setSpinning} = useSpin()
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -34,7 +37,7 @@ const Registrar = () => {
             return
         }
         setAlerta({})
-        
+        setSpinning(true)
         // Crear el usuario en la API
         try {
             const {data} = await clienteAxios.post(`/usuarios`, {nombre, email, password})
@@ -51,6 +54,8 @@ const Registrar = () => {
                 error: true,
                 msg: error.response.data.msg
             })
+        } finally {
+            setSpinning(false)
         }
     }
 

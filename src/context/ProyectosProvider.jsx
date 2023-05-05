@@ -3,6 +3,7 @@ import clienteAxios from "../config/clienteAxios"
 import { useNavigate } from "react-router-dom"
 import io from 'socket.io-client'
 import useAuth from "../hooks/useAuth"
+import useSpin from "../hooks/useSpin"
 let socket
 
 const ProyectosContext = createContext()
@@ -20,9 +21,11 @@ const ProyectosProvider = ({children}) => {
     const [buscador, setBuscador] = useState(false)
 
     const {auth} = useAuth()
+    const {setSpinning} = useSpin()
 
     useEffect(() => {
         const obtenerProyectos = async () => {
+            setSpinning(true)
             try {
                 const token = localStorage.getItem('token')
                 if(!token) return
@@ -36,6 +39,8 @@ const ProyectosProvider = ({children}) => {
                 setProyectos(data)
             } catch (error) {
                 console.log(error)
+            } finally {
+                setSpinning(false)
             }
         }
         obtenerProyectos()
@@ -60,6 +65,7 @@ const ProyectosProvider = ({children}) => {
     }
 
     const editarProyecto = async p => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -82,9 +88,12 @@ const ProyectosProvider = ({children}) => {
             }, 3000);
         } catch (error) {
             console.log(error)
+        } finally {
+            setSpinning(false)
         }
     }
     const nuevoProyecto = async p => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -106,11 +115,13 @@ const ProyectosProvider = ({children}) => {
             }, 3000);
         } catch (error) {
             console.log(error)
+        } finally {
+            setSpinning(false)
         }
     }
 
     const obtenerProyecto = async id => {
-        setCargando(true)
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -133,11 +144,12 @@ const ProyectosProvider = ({children}) => {
                 setAlerta({})
             }, 3000);
         } finally {
-            setCargando(false)
+            setSpinning(false)
         }
     }
 
     const eliminarProyecto = async id => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -160,6 +172,8 @@ const ProyectosProvider = ({children}) => {
             }, 3000);
         } catch (error) {
                 console.log(error)
+        } finally {
+            setSpinning(false)
         }
     }
 
@@ -174,6 +188,7 @@ const ProyectosProvider = ({children}) => {
     }
 
     const crearTarea = async tarea => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -196,10 +211,13 @@ const ProyectosProvider = ({children}) => {
             socket.emit('nueva tarea', data)
         } catch (error) {
             console.log(error)
+        } finally {
+            setSpinning(false)
         }
     }
 
     const editarTarea = async tarea => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -222,6 +240,8 @@ const ProyectosProvider = ({children}) => {
             socket.emit('actualizar tarea', data)
         } catch (error) {
             console.log(error)
+        } finally {
+            setSpinning(false)
         }
     }
 
@@ -236,6 +256,7 @@ const ProyectosProvider = ({children}) => {
     }
 
     const eliminarTarea = async () => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -259,10 +280,13 @@ const ProyectosProvider = ({children}) => {
             }, 3000);
         } catch (error) {
             console.log(error)
+        } finally {
+            setSpinning(false)
         }
     }
 
     const submitColaborador = async email => {
+        setSpinning(true)
         setCargando(true)
         try {
             const token = localStorage.getItem('token')
@@ -283,11 +307,12 @@ const ProyectosProvider = ({children}) => {
             })
         } finally {
             setCargando(false)
+            setSpinning(false)
         }
     }
 
     const agregarColaborador = async email => {
-        console.log(proyecto)
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -311,6 +336,8 @@ const ProyectosProvider = ({children}) => {
                 error: true,
                 msg: error.response.data.msg
             })
+        } finally {
+            setSpinning(false)
         }
     }
 
@@ -320,6 +347,7 @@ const ProyectosProvider = ({children}) => {
     }
 
     const eliminarColaborador = async () => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -347,10 +375,13 @@ const ProyectosProvider = ({children}) => {
                 error: true,
                 msg: error.response.data.msg
             })
+        } finally {
+            setSpinning(false)
         }
     }
 
     const completarTarea = async id => {
+        setSpinning(true)
         try {
             const token = localStorage.getItem('token')
             if(!token) return
@@ -367,6 +398,8 @@ const ProyectosProvider = ({children}) => {
             socket.emit('cambiar estado', data)
         } catch (error) {
             console.log(error.response)
+        } finally {
+            setSpinning(false)
         }
     }
 

@@ -9,12 +9,15 @@ import Colaborador from "../components/Colaborador"
 import ModalEliminarColaborador from "../components/ModalEliminarColaborador"
 import useAdmin from "../hooks/useAdmin"
 import io from 'socket.io-client'
+import Spinner from "../components/Spinner"
+import useSpin from "../hooks/useSpin"
 let socket
 
 const Proyecto = () => {
     const params = useParams()
     const {obtenerProyecto, proyecto, cargando, handleModalTarea, alerta, submitTareasProyecto, eliminarTareaProyecto, actualizarTareaProyecto, cambiarEstadoTarea} = useProyectos()
     const admin = useAdmin()
+    const {spinning} = useSpin()
     useEffect(() => {
         obtenerProyecto(params.id)
     }, [])
@@ -37,8 +40,8 @@ const Proyecto = () => {
         })
     })
     const {nombre} = proyecto
-    if(cargando) return 'Cargando...'
     const {msg, error} = alerta
+    if(spinning) return <Spinner />
     return (
         <>
             <div className="flex justify-between">

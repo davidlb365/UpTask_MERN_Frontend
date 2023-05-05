@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Alerta from "../components/Alerta"
 import clienteAxios from "../config/clienteAxios"
 import useAuth from "../hooks/useAuth"
+import useSpin from "../hooks/useSpin"
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -10,6 +11,7 @@ const Login = () => {
     const [alerta, setAlerta] = useState({})
 
     const {setAuth, cargando} = useAuth()
+    const {setSpinning} = useSpin()
     const navigate = useNavigate()
 
     const handleSubmit = async e => {
@@ -21,6 +23,7 @@ const Login = () => {
             })
             return
         }
+        setSpinning(true)
         try {
             const {data} = await clienteAxios.post(`/usuarios/login`, {email, password})
             localStorage.setItem('token', data.token)
@@ -32,6 +35,8 @@ const Login = () => {
                 error: true,
                 msg: error.response.data.msg
             })
+        } finally {
+            setSpinning(false)
         }
     }
     const {msg} = alerta

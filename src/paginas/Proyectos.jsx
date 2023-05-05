@@ -3,10 +3,14 @@ import Alerta from "../components/Alerta"
 import PreviewProyecto from "../components/PreviewProyecto"
 import Sidebar from "../components/Sidebar"
 import useProyectos from "../hooks/useProyectos"
+import useSpin from "../hooks/useSpin"
+import Spinner from "../components/Spinner"
 
 const Proyectos = () => {
     const {proyectos, alerta} = useProyectos()
     const {msg} = alerta
+    const {spinning} = useSpin()
+    if(spinning) return <Spinner />
     return (
         <>
             <h1 className="text-4xl font-black">Proyectos</h1>
