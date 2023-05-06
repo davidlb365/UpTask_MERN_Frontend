@@ -327,6 +327,7 @@ const ProyectosProvider = ({children}) => {
                 error: false,
                 msg: data.msg
             })
+            socket.emit('agregar colaborador', colaborador, proyecto._id)
             setColaborador({})
             setTimeout(() => {
                 setAlerta({})
@@ -366,9 +367,7 @@ const ProyectosProvider = ({children}) => {
             setTimeout(() => {
                 setAlerta({})
             }, 3000);
-            const proyectoActualizado = {...proyecto}
-            proyectoActualizado.colaboradores = proyectoActualizado.colaboradores.filter(c => c._id !== colaborador._id)
-            setProyecto(proyectoActualizado)
+            socket.emit('eliminar colaborador', colaborador, proyecto._id)
             setModalEliminarColaborador(false)
         } catch (error) {
             setAlerta({
@@ -417,7 +416,6 @@ const ProyectosProvider = ({children}) => {
 
     const eliminarTareaProyecto = tarea => {
         const proyectoActualizado = {...proyecto}
-        console.log(proyecto.tareas)
         proyectoActualizado.tareas = proyecto.tareas.filter(t => t._id !== tarea._id)
         setProyecto(proyectoActualizado)
     }
@@ -437,6 +435,18 @@ const ProyectosProvider = ({children}) => {
             if(t._id === tarea._id) return tarea
             return t
         })
+        setProyecto(proyectoActualizado)
+    }
+
+    const agregarColaboradorProyecto = colaboradorAgregado => {
+        const proyectoActualizado = {...proyecto}
+        proyectoActualizado.colaboradores = [...proyectoActualizado.colaboradores, colaboradorAgregado]
+        setProyecto(proyectoActualizado)
+    }
+
+    const eliminarColaboradorProyecto = colaboradorEliminado => {
+        const proyectoActualizado = {...proyecto}
+        proyectoActualizado.colaboradores = proyectoActualizado.colaboradores.filter(c => c._id !== colaboradorEliminado._id)
         setProyecto(proyectoActualizado)
     }
 
@@ -478,7 +488,9 @@ const ProyectosProvider = ({children}) => {
                 eliminarTareaProyecto,
                 actualizarTareaProyecto,
                 cambiarEstadoTarea,
-                cerrarSesionProyectos
+                agregarColaboradorProyecto,
+                eliminarColaboradorProyecto,
+                cerrarSesionProyectos,
             }}
         >{children}
         </ProyectosContext.Provider>

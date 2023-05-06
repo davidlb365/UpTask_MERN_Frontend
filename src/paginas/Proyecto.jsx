@@ -15,7 +15,7 @@ let socket
 
 const Proyecto = () => {
     const params = useParams()
-    const {obtenerProyecto, proyecto, cargando, handleModalTarea, alerta, submitTareasProyecto, eliminarTareaProyecto, actualizarTareaProyecto, cambiarEstadoTarea} = useProyectos()
+    const {obtenerProyecto, proyecto, cargando, handleModalTarea, alerta, submitTareasProyecto, eliminarTareaProyecto, actualizarTareaProyecto, cambiarEstadoTarea, agregarColaboradorProyecto, eliminarColaboradorProyecto} = useProyectos()
     const admin = useAdmin()
     const {spinning} = useSpin()
     useEffect(() => {
@@ -38,6 +38,12 @@ const Proyecto = () => {
         })
         socket.on('nuevo estado', nuevoEstadoTarea => {
             cambiarEstadoTarea(nuevoEstadoTarea)
+        })
+        socket.on('colaborador agregado', colaboradorAgregado => {
+            agregarColaboradorProyecto(colaboradorAgregado)
+        })
+        socket.on('colaborador eliminado', colaboradorEliminado => {
+            eliminarColaboradorProyecto(colaboradorEliminado)
         })
     })
     const {nombre} = proyecto
