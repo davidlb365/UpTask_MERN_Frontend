@@ -8,7 +8,7 @@ import useSpin from "../hooks/useSpin"
 const RutaProtegida = () => {
     const {auth, cargando} = useAuth()
     const {spinning} = useSpin()
-    if(cargando) return
+    if(cargando) return <Spinner />
     return (
         <>
             {auth._id ? (

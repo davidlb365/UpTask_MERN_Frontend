@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import clienteAxios from "../config/clienteAxios";
 import useSpin from "../hooks/useSpin";
 
@@ -10,6 +10,7 @@ const AuthProvider = ({children}) => {
     const [cargando, setCargando] = useState(true)
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         const autenticarUsuario = async () => {
@@ -27,7 +28,7 @@ const AuthProvider = ({children}) => {
             try {
                 const {data} = await clienteAxios('/usuarios/perfil', config)
                 setAuth(data)
-                // navigate('/proyectos')
+                if(location.pathname === '/') navigate('/proyectos')
             } catch (error) {
                 setAuth({})
             } finally {
